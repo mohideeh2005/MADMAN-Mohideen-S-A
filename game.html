@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moai Adventure</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #87CEEB;
+            font-family: Arial, sans-serif;
+        }
+        #gameCanvas {
+            width: 800px;
+            height: 400px;
+            background: linear-gradient(#87CEEB, #FFFFFF);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #000;
+        }
+        #ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 50px;
+            background: #8B4513;
+            background-image: linear-gradient(#8B4513, #A0522D);
+        }
+        #character {
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            bottom: 50px;
+            left: 50px;
+            font-size: 40px;
+            line-height: 40px;
+            text-align: center;
+            background: none;
+            transition: left 0.05s linear; /* Smooth horizontal movement */
+        }
+        #character::before {
+            content: '🗿'; /* Moai Emoji */
+            display: block;
+            text-shadow: 2px 2px 4px #000;
+        }
+        .obstacle {
+            width: 30px;
+            height: 40px;
+            background: #006400;
+            position: absolute;
+            bottom: 50px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        #finishLine {
+            width: 10px;
+            height: 100px;
+            background: repeating-linear-gradient(
+                45deg,
+                #FFD700,
+                #FFD700 10px,
+                #000 10px,
+                #000 20px
+            );
+            position: absolute;
+            bottom: 50px;
+            right: 20px;
+        }
+        #message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            text-align: center;
+            display: none;
+            text-shadow: 2px 2px 4px #000;
+        }
+        #tryAgain {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            padding: 10px 20px;
+            background: #FFD700;
+            border: 2px solid #000;
+            cursor: pointer;
+            display: none;
+        }
+        #credits {
+            position: absolute;
+            width: 100%;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            display: none;
+            bottom: 100%;
+            animation: scrollCredits 45s linear forwards;
+            text-shadow: 1px 1px 2px #000;
+        }
+        @keyframes scrollCredits {
+            0% { bottom: -3000px; }
+            100% { bottom: 400px; }
+        }
+        #credits p {
+            margin: 15px 0;
+        }
+        #credits h3 {
+            margin: 30px 0 10px;
+            font-size: 22px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameCanvas">
+        <div id="ground"></div>
+        <div id="character"></div>
+        <div class="obstacle" style="right: 500px;"></div>
+        <div class="obstacle" style="right: 350px;"></div>
+        <div class="obstacle" style="right: 200px;"></div>
+        <div id="finishLine"></div>
+        <div id="message">appam kuttika is gay(4ft2)</div>
+        <button id="tryAgain">Try Again</button>
+        <div id="credits">
+            <h3>A Game by</h3><p>MOHIDEEN S A</p>
+            <h3>Directed by</h3><p>MOHIDEEN S A</p>
+            <h3>Produced by</h3><p>MOHIDEEN S A</p>
+            <h3>Executive Producers</h3><p>MOHIDEEN S A</p><p>MOHIDEEN S A</p>
+            <h3>Written by</h3><p>MOHIDEEN S A</p>
+            <h3>Game Design</h3><p>MOHIDEEN S A</p>
+            <h3>Lead Developer</h3><p>MOHIDEEN S A</p>
+            <h3>Programming Team</h3><p>MOHIDEEN S A</p><p>MOHIDEEN S A</p><p>MOHIDEEN S A</p>
+            <h3>Art Direction</h3><p>MOHIDEEN S A</p>
+            <h3>Character Design</h3><p>MOHIDEEN S A</p>
+            <h3>Level Design</h3><p>MOHIDEEN S A</p>
+            <h3>Music Composed by</h3><p>MOHIDEEN S A</p>
+            <h3>Sound Design</h3><p>MOHIDEEN S A</p>
+            <h3>Visual Effects</h3><p>MOHIDEEN S A</p>
+            <h3>Animation</h3><p>MOHIDEEN S A</p>
+            <h3>Cinematography</h3><p>MOHIDEEN S A</p>
+            <h3>Editing</h3><p>MOHIDEEN S A</p>
+            <h3>Production Management</h3><p>MOHIDEEN S A</p>
+            <h3>Assistant Directors</h3><p>MOHIDEEN S A</p><p>MOHIDEEN S A</p>
+            <h3>Casting by</h3><p>MOHIDEEN S A</p>
+            <h3>Stunt Coordination</h3><p>MOHIDEEN S A</p>
+            <h3>Costume Design</h3><p>MOHIDEEN S A</p>
+            <h3>Makeup Department</h3><p>MOHIDEEN S A</p>
+            <h3>Special Effects Team</h3><p>MOHIDEEN S A</p><p>MOHIDEEN S A</p>
+            <h3>Lighting Department</h3><p>MOHIDEEN S A</p>
+            <h3>Grip Department</h3><p>MOHIDEEN S A</p>
+            <h3>Camera Operators</h3><p>MOHIDEEN S A</p><p>MOHIDEEN S A</p>
+            <h3>Quality Assurance</h3><p>MOHIDEEN S A</p><p>MOHIDEEN S A</p>
+            <h3>Marketing Team</h3><p>MOHIDEEN S A</p>
+            <h3>Public Relations</h3><p>MOHIDEEN S A</p>
+            <h3>Legal Counsel</h3><p>MOHIDEEN S A</p>
+            <h3>Finance Department</h3><p>MOHIDEEN S A</p>
+            <h3>Catering Services</h3><p>MOHIDEEN S A</p>
+            <h3>Transportation</h3><p>MOHIDEEN S A</p>
+            <h3>Special Thanks</h3><p>MOHIDEEN S A</p><p>MOHIDEEN S A</p><p>MOHIDEEN S A</p>
+            <h3>Dedicated to</h3><p>MOHIDEEN S A</p>
+            <h3>Chief Meme Officer</h3><p>MOHIDEEN S A</p>
+            <h3>Moai Whisperer</h3><p>MOHIDEEN S A</p>
+            <h3>Official Obstacle Polisher</h3><p>MOHIDEEN S A</p>
+            <h3>Pixel Therapist</h3><p>MOHIDEEN S A</p>
+            <h3>Emergency Jump Consultant</h3><p>MOHIDEEN S A</p>
+            <h3>Grass Color Coordinator</h3><p>MOHIDEEN S A</p>
+            <h3>Finish Line Motivational Speaker</h3><p>MOHIDEEN S A</p>
+            <h3>Cloud Fluffiness Inspector</h3><p>MOHIDEEN S A</p>
+            <h3>Official Game Tester (Lost 47 Times)</h3><p>MOHIDEEN S A</p>
+            <h3>Chief Coffee Spiller</h3><p>MOHIDEEN S A</p>
+            <h3>Moai Emotional Support Team</h3><p>MOHIDEEN S A</p><p>MOHIDEEN S A</p>
+            <h3>Random Bug Generator</h3><p>MOHIDEEN S A</p>
+            <h3>Unofficial Snack Provider</h3><p>MOHIDEEN S A</p>
+            <h3>Keyboard Smash Specialist</h3><p>MOHIDEEN S A</p>
+            <h3>Director of Silly Walks</h3><p>MOHIDEEN S A</p>
+            <h3>Official Moai Polka Dance Choreographer</h3><p>MOHIDEEN S A</p>
+            <h3>Lead Procrastinator</h3><p>MOHIDEEN S A</p>
+            <h3>Chief Excuse Maker</h3><p>MOHIDEEN S A</p>
+            <h3>Obstacle Smell Tester</h3><p>MOHIDEEN S A</p>
+            <h3>Pixelated Laughter Supervisor</h3><p>MOHIDEEN S A</p>
+            <h3>Moai Meme Curator</h3><p>MOHIDEEN S A</p>
+            <h3>Official Game Over Button Polisher</h3><p>MOHIDEEN S A</p>
+            <h3>Chief Banana Peel Placement Officer</h3><p>MOHIDEEN S A</p>
+            <h3>Lead Air Guitarist</h3><p>MOHIDEEN S A</p>
+            <h3>Official "Whoops" Counter</h3><p>MOHIDEEN S A</p>
+            <h3>Moai Fan Club President</h3><p>MOHIDEEN S A</p>
+            <h3>Random Dance Break Coordinator</h3><p>MOHIDEEN S A</p>
+            <h3>Chief Napping Strategist</h3><p>MOHIDEEN S A</p>
+            <h3>Official "I Meant to Do That" Advocate</h3><p>MOHIDEEN S A</p>
+            <h3>Pixelated Chaos Manager</h3><p>MOHIDEEN S A</p>
+            <h3>Lead Moai Stare Contest Champion</h3><p>MOHIDEEN S A</p>
+            <h3>In Loving Memory Of</h3>
+            <p>The Moai's Motivation (It Tried So Hard)</p>
+            <p>No pixels were harmed in the making of this game.</p>
+            <p>Except that one. Oops.</p>
+            <p>Thanks for playing, you absolute legend!</p>
+            <p>Now go touch some grass, says MOHIDEEN S A.</p>
+        </div>
+    </div>
+
+    <script>
+        const character = document.getElementById('character');
+        const gameCanvas = document.getElementById('gameCanvas');
+        const finishLine = document.getElementById('finishLine');
+        const message = document.getElementById('message');
+        const tryAgainBtn = document.getElementById('tryAgain');
+        const credits = document.getElementById('credits');
+        const obstacles = document.querySelectorAll('.obstacle');
+        let isJumping = false;
+        let gameOver = false;
+        let positionX = 50; // Starting X position
+        let positionY = 50; // Starting Y position (above ground)
+        let velocityX = 0; // Horizontal velocity
+        const speed = 4; // Movement speed
+        const jumpHeight = 120; // Jump height
+        const jumpSpeed = 8; // Jump velocity
+        let velocityY = 0; // Vertical velocity
+        const gravity = 0.5; // Gravity for smooth fall
+
+        // Key states
+        let keys = {
+            left: false,
+            right: false,
+            space: false
+        };
+
+        // Handle key presses
+        document.addEventListener('keydown', (e) => {
+            if (gameOver) return;
+            switch (e.code) {
+                case 'ArrowLeft':
+                    keys.left = true;
+                    break;
+                case 'ArrowRight':
+                    keys.right = true;
+                    break;
+                case 'Space':
+                    if (!isJumping) {
+                        keys.space = true;
+                        velocityY = jumpSpeed;
+                        isJumping = true;
+                    }
+                    break;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            switch (e.code) {
+                case 'ArrowLeft':
+                    keys.left = false;
+                    break;
+                case 'ArrowRight':
+                    keys.right = false;
+                    break;
+                case 'Space':
+                    keys.space = false;
+                    break;
+            }
+        });
+
+        // Game loop
+        function gameLoop() {
+            if (gameOver) return;
+
+            // Horizontal movement
+            velocityX = 0;
+            if (keys.left && positionX > 0) {
+                velocityX = -speed;
+            }
+            if (keys.right && positionX < 750) {
+                velocityX = speed;
+            }
+            positionX += velocityX;
+            character.style.left = positionX + 'px';
+
+            // Vertical movement (jumping and gravity)
+            if (isJumping) {
+                positionY += velocityY;
+                velocityY -= gravity; // Apply gravity
+                character.style.bottom = positionY + 'px';
+
+                if (positionY <= 50) {
+                    positionY = 50;
+                    velocityY = 0;
+                    isJumping = false;
+                    character.style.bottom = '50px';
+                }
+            }
+
+            const charRect = character.getBoundingClientRect();
+
+            // Collision with obstacles
+            obstacles.forEach(obstacle => {
+                const obsRect = obstacle.getBoundingClientRect();
+                if (
+                    charRect.right > obsRect.left &&
+                    charRect.left < obsRect.right &&
+                    charRect.bottom > obsRect.top
+                ) {
+                    gameOver = true;
+                    tryAgainBtn.style.display = 'block';
+                }
+            });
+
+            // Win condition: Reach the finish line
+            const finishRect = finishLine.getBoundingClientRect();
+            if (charRect.right >= finishRect.left) {
+                gameOver = true;
+                message.style.display = 'block';
+                setTimeout(() => {
+                    message.style.display = 'none';
+                    credits.style.display = 'block';
+                }, 2000);
+            }
+
+            if (!gameOver) {
+                requestAnimationFrame(gameLoop);
+            }
+        }
+
+        // Restart game
+        tryAgainBtn.addEventListener('click', () => {
+            gameOver = false;
+            tryAgainBtn.style.display = 'none';
+            positionX = 50;
+            positionY = 50;
+            velocityX = 0;
+            velocityY = 0;
+            isJumping = false;
+            keys = { left: false, right: false, space: false };
+            character.style.left = positionX + 'px';
+            character.style.bottom = positionY + 'px';
+            gameLoop();
+        });
+
+        // Start game
+        gameLoop();
+    </script>
+</body>
+</html>
